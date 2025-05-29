@@ -4,40 +4,40 @@ CREATE TABLE User (
     password VARCHAR(100) NOT NULL,
     username VARCHAR(50) NOT NULL UNIQUE,
     birth_date DATE,
-    gender VARCHAR(10),
+    gender ENUM ('male', 'female', 'other') NOT NULL,
     country VARCHAR(50),
     postal_code VARCHAR(20)
 );
 
 CREATE TABLE Channel (
     channel_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    name VARCHAR(100),
+    user_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
     description TEXT,
-    created_at DATETIME,
+    created_at DATETIME NOT NULL,
     FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 
 CREATE TABLE Video (
     video_id INT AUTO_INCREMENT PRIMARY KEY,
-    channel_id INT,
-    title VARCHAR(200),
+    channel_id INT NOT NULL,
+    title VARCHAR(200) NOT NULL,
     description TEXT,
-    size DECIMAL(10,2),
-    filename VARCHAR(255),
-    duration TIME,
+    file_size_mb FLOAT,
+    filename VARCHAR(255) NOT NULL,
+    duration_seconds INT,
     thumbnail VARCHAR(255),
-    visibility VARCHAR(10), -- public, hidden, private
+    visibility ENUM('public', 'hidden','private')DEFAULT 'public',
     views INT DEFAULT 0,
     likes_count INT DEFAULT 0,
     dislikes_count INT DEFAULT 0,
-    published_at DATETIME,
+    published_at DATETIME NOT NULL,
     FOREIGN KEY (channel_id) REFERENCES Channel(channel_id)
 );
 
 CREATE TABLE Tag (
     tag_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) UNIQUE
+    name VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE VideoTag (
@@ -51,7 +51,7 @@ CREATE TABLE VideoTag (
 CREATE TABLE Subscription (
     subscriber_id INT,
     channel_id INT,
-    subscribed_at DATETIME,
+    subscribed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (subscriber_id, channel_id),
     FOREIGN KEY (subscriber_id) REFERENCES User(user_id),
     FOREIGN KEY (channel_id) REFERENCES Channel(channel_id)
@@ -60,8 +60,8 @@ CREATE TABLE Subscription (
 CREATE TABLE VideoReaction (
     user_id INT,
     video_id INT,
-    reaction VARCHAR(10), -- like or dislike
-    reacted_at DATETIME,
+    reaction ENUM ('like','dislike') NOT NULL,
+    reacted_at DATETIME NOT NULL,
     PRIMARY KEY (user_id, video_id),
     FOREIGN KEY (user_id) REFERENCES User(user_id),
     FOREIGN KEY (video_id) REFERENCES Video(video_id)
@@ -69,16 +69,17 @@ CREATE TABLE VideoReaction (
 
 CREATE TABLE Playlist (
     playlist_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    name VARCHAR(100),
-    created_at DATETIME,
-    visibility VARCHAR(10), -- public or private
+    user_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    created_at DATETIME NOT NULL,
+    visibility ENUM ('public','private') DEFAULT PRIVATE,
     FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 
 CREATE TABLE PlaylistVideo (
     playlist_id INT,
     video_id INT,
+    position_in_playlist INT,
     PRIMARY KEY (playlist_id, video_id),
     FOREIGN KEY (playlist_id) REFERENCES Playlist(playlist_id),
     FOREIGN KEY (video_id) REFERENCES Video(video_id)
@@ -86,10 +87,10 @@ CREATE TABLE PlaylistVideo (
 
 CREATE TABLE Comment (
     comment_id INT AUTO_INCREMENT PRIMARY KEY,
-    video_id INT,
-    user_id INT,
-    text TEXT,
-    commented_at DATETIME,
+    video_id INT NOT NULL,
+    user_id INT NOT NULL,
+    text TEXT NOT NULL,
+    commented_at DATETIME NOT NULL,
     FOREIGN KEY (video_id) REFERENCES Video(video_id),
     FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
@@ -97,8 +98,8 @@ CREATE TABLE Comment (
 CREATE TABLE CommentReaction (
     user_id INT,
     comment_id INT,
-    reaction VARCHAR(10), -- like or dislike
-    reacted_at DATETIME,
+    reaction ENUM ('like','dislike') NOT NULL,
+    reacted_at DATETIME NOT NULL,
     PRIMARY KEY (user_id, comment_id),
     FOREIGN KEY (user_id) REFERENCES User(user_id),
     FOREIGN KEY (comment_id) REFERENCES Comment(comment_id)
