@@ -115,13 +115,12 @@ INSERT INTO Channel (user_id, name, description, created_at) VALUES
 (1, 'Alice’s Channel', 'Tech tutorials and reviews', '2024-01-15 10:30:00'),
 (2, 'Bob’s Vlog', 'Daily life and adventures', '2023-11-03 16:45:00');
 
-INSERT INTO Video (channel_id, title, description, size, filename, duration, thumbnail, visibility, published_at) VALUES
-(1, 'How to Code in SQL', 'Beginner tutorial for SQL', 120.5, 'sql_tutorial.mp4', '00:10:00', 'thumb_sql.jpg', 'public', NOW()),
-(2, 'My Trip to Japan', 'Travel vlog from Tokyo', 300.2, 'japan_trip.mp4', '00:20:30', 'thumb_japan.jpg', 'public', NOW()),
-(1, 'SQL Joins Explained', 'Deep dive into SQL joins with examples', 150.75, 'sql_joins.mp4',
- '00:12:45', 'thumb_joins.jpg', 'public', '2024-02-10 14:00:00'),
-(2, 'Morning Routine', 'My quiet morning routine before work', 80.00, 'morning_routine.mp4',
- '00:08:30', 'thumb_morning.jpg', 'private', '2023-12-01 08:15:00');
+INSERT INTO Video (channel_id, title, description, file_size_mb, filename, duration_seconds, thumbnail, visibility, published_at) VALUES
+(1, 'How to Code in SQL', 'Beginner tutorial for SQL', 120.5, 'sql_tutorial.mp4', 600, 'thumb_sql.jpg', 'public', NOW()),
+(2, 'My Trip to Japan', 'Travel vlog from Tokyo', 300.2, 'japan_trip.mp4', 1230, 'thumb_japan.jpg', 'public', NOW()),
+(1, 'SQL Joins Explained', 'Deep dive into SQL joins with examples', 150.75, 'sql_joins.mp4', 765, 'thumb_joins.jpg', 'public', '2024-02-10 14:00:00'),
+(2, 'Morning Routine', 'My quiet morning routine before work', 80.00, 'morning_routine.mp4', 510, 'thumb_morning.jpg', 'private', '2023-12-01 08:15:00');
+
 
 INSERT INTO Tag (name) VALUES 
 ('tutorial'),
